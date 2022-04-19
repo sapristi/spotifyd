@@ -129,6 +129,7 @@ pub(crate) fn initial_state(config: config::SpotifydConfig) -> main_loop::MainLo
             mixer,
             backend,
             audio_device: config.audio_device.clone(),
+            audio_format: config.audio_format,
         },
         spotifyd_state: main_loop::SpotifydState {
             ctrl_c_stream: Box::pin(ctrl_c()),

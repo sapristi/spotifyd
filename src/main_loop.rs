@@ -50,6 +50,7 @@ pub struct AudioSetup {
     pub mixer: Box<dyn FnMut() -> Box<dyn Mixer>>,
     pub backend: fn(Option<String>, AudioFormat) -> Box<dyn Sink>,
     pub audio_device: Option<String>,
+    pub audio_format: AudioFormat,
 }
 
 pub struct SpotifydState {
@@ -158,13 +159,14 @@ impl Future for MainLoopState {
                 self.librespot_connection.connection = Box::pin(futures::future::pending());
                 let backend = self.audio_setup.backend;
                 let audio_device = self.audio_setup.audio_device.clone();
+                let audio_format = self.audio_setup.audio_format;
                 let (player, event_channel) = Player::new(
                     self.player_config.clone(),
                     session.clone(),
                     audio_filter,
                     // TODO: dunno how to work with AudioFormat yet, maybe dig further if this
                     // doesn't work for all configurations
-                    move || (backend)(audio_device, AudioFormat::default()),
+                    move || (backend)(audio_device, audio_format),
                 );
 
                 self.spotifyd_state.player_event_channel =
