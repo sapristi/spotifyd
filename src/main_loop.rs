@@ -164,7 +164,7 @@ impl Future for MainLoopState {
                     audio_filter,
                     // TODO: dunno how to work with AudioFormat yet, maybe dig further if this
                     // doesn't work for all configurations
-                    move || (backend)(audio_device, AudioFormat::default()),
+                    move || (backend)(audio_device, AudioFormat::S32),
                 );
 
                 self.spotifyd_state.player_event_channel =
